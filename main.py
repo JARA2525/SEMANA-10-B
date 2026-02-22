@@ -1,3 +1,5 @@
+# main.py
+
 from SERVICIOS.inventario import Inventario
 
 inv = Inventario()
