@@ -1,3 +1,5 @@
+# SERVICIOS/inventario.py
+
 from MODELOS.producto import Producto
 
 class Inventario:
