@@ -6,37 +6,50 @@ class Inventario:
         self.productos = []
         self.cargar_desde_archivo()
 
-    # Guardar inventario en archivo
+    # Guardar inventario
     def guardar_en_archivo(self):
-        try:
-            with open(self.archivo, "w") as f:
-                for p in self.productos:
-                    f.write(str(p) + "\n")
-            print("Inventario guardado correctamente.")
-        except PermissionError:
-            print("Error: No tienes permisos para escribir el archivo.")
+        with open(self.archivo, "w") as f:
+            for p in self.productos:
+                f.write(f"{p.id},{p.nombre},{p.precio},{p.cantidad}\n")
 
-    # Cargar inventario desde archivo
+    # Cargar inventario
     def cargar_desde_archivo(self):
         try:
             with open(self.archivo, "r") as f:
                 for linea in f:
-                    nombre, precio, cantidad = linea.strip().split(",")
-                    self.productos.append(Producto(nombre, float(precio), int(cantidad)))
-            print("Inventario cargado desde archivo.")
+                    idp, nombre, precio, cantidad = linea.strip().split(",")
+                    self.productos.append(Producto(int(idp), nombre, float(precio), int(cantidad)))
         except FileNotFoundError:
             print("Archivo no encontrado, creando uno nuevo...")
-            open(self.archivo, "w").close()
         except Exception:
-            print("Error al leer el archivo (archivo corrupto).")
+            print("Error al leer archivo")
 
     # Agregar producto
     def agregar_producto(self, nombre, precio, cantidad):
-        self.productos.append(Producto(nombre, precio, cantidad))
+        nuevo_id = len(self.productos) + 1
+        self.productos.append(Producto(nuevo_id, nombre, precio, cantidad))
         self.guardar_en_archivo()
-        print("Producto agregado y guardado.")
+        print("Producto agregado")
 
     # Mostrar productos
     def mostrar(self):
         for p in self.productos:
-            print(p.nombre, p.precio, p.cantidad)
+            print(p.id, p.nombre, p.precio, p.cantidad)
+
+    # Modificar producto
+    def modificar_producto(self, idp, n, p, c):
+        encontrado = False
+
+        for prod in self.productos:
+            if prod.id == idp:
+                prod.nombre = n
+                prod.precio = p
+                prod.cantidad = c
+                encontrado = True
+                break
+
+        if encontrado:
+            self.guardar_en_archivo()
+            print("Producto modificado correctamente")
+        else:
+            print("Producto no encontrado")

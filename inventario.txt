@@ -1,1 +1,1 @@
-type nul > inventario.txt
+1,Estuches Varios modelos,0.95,100
